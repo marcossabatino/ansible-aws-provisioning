@@ -1,0 +1,37 @@
+---
+# ── Package installation ───────────────────────────────────────────
+packages_to_install:
+  - nginx
+  - curl
+  - python3
+  - python3-pip
+  - git
+  - htop
+  - unzip
+
+# ── Nginx configuration ────────────────────────────────────────────
+nginx_user: www-data
+nginx_worker_processes: auto
+nginx_worker_connections: 1024
+nginx_keepalive_timeout: 65
+nginx_access_log: /var/log/nginx/access.log
+nginx_error_log: /var/log/nginx/error.log
+nginx_server_name: "{{ ansible_hostname }}"
+nginx_root: /var/www/html
+nginx_index: index.html
+
+# ── Application settings ───────────────────────────────────────────
+app_name: demo-app
+app_port: 8080
+app_root: /var/www/demo-app
+app_version: "1.0.0"
+
+# ── Health check ───────────────────────────────────────────────────
+health_check_path: /health
+health_check_expected_status: 200
+health_check_retries: 5
+health_check_delay: 5
+
+# ── Verification report ────────────────────────────────────────────
+report_output_dir: /tmp/provision_reports
+report_timestamp: "{{ ansible_date_time.iso8601_basic_short }}"

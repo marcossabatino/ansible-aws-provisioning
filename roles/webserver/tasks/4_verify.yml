@@ -1,0 +1,35 @@
+---
+- name: VERIFY | Wait for nginx to be ready
+  ansible.builtin.wait_for:
+    port: 80
+    timeout: 30
+  changed_when: false
+
+- name: VERIFY | Gather service facts
+  ansible.builtin.service_facts:
+
+- name: VERIFY | Check nginx service status
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.services['nginx.service'].state == 'running'
+    fail_msg: "nginx service is not running"
+  changed_when: false
+
+- name: VERIFY | Check application HTTP response
+  ansible.builtin.uri:
+    url: "http://{{ ansible_host }}:80{{ health_check_path }}"
+    status_code: "{{ health_check_expected_status }}"
+    retries: "{{ health_check_retries }}"
+    delay: "{{ health_check_delay }}"
+  register: health_check_result
+  changed_when: false
+
+- name: VERIFY | Print verification summary
+  ansible.builtin.debug:
+    msg: |
+      Host         : {{ ansible_hostname }}
+      IP           : {{ ansible_host }}
+      nginx status : {{ ansible_facts.services['nginx.service'].state }}
+      HTTP status  : {{ health_check_result.status }}
+      App URL      : http://{{ ansible_host }}/{{ health_check_path }}
+  changed_when: false

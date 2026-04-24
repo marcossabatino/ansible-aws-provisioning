@@ -1,0 +1,15 @@
+---
+# deploy.yml — Application-only deployment
+# Requires the webserver role to have been provisioned first (provision.yml).
+# Usage:
+#   ansible-playbook -i inventory/aws_ec2.yml playbooks/deploy.yml
+#   ansible-playbook -i inventory/aws_ec2.yml playbooks/deploy.yml -e "app_version=1.1.0"
+
+- name: Deploy application changes
+  hosts: webservers
+  become: true
+  gather_facts: true
+
+  roles:
+    - role: webserver
+      tags: [app, verify]

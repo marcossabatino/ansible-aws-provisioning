@@ -1,0 +1,17 @@
+---
+- name: PACKAGES | Update apt cache
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: PACKAGES | Install required packages
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ packages_to_install }}"
+
+- name: PACKAGES | Ensure pip is up to date
+  ansible.builtin.pip:
+    name: pip
+    state: latest
+    executable: pip3

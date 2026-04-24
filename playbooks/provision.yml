@@ -1,0 +1,43 @@
+---
+# provision.yml — Full provisioning playbook
+# Usage:
+#   ansible-playbook -i inventory/aws_ec2.yml playbooks/provision.yml
+#   ansible-playbook -i inventory/aws_ec2.yml playbooks/provision.yml --tags nginx
+#   ansible-playbook -i inventory/aws_ec2.yml playbooks/provision.yml --check
+
+- name: Provision EC2 instances with full stack
+  hosts: webservers
+  become: true
+  gather_facts: true
+
+  pre_tasks:
+    - name: Assert Ubuntu >= 20.04
+      ansible.builtin.assert:
+        that:
+          - ansible_distribution == 'Ubuntu'
+          - ansible_distribution_major_version is version('20.04', '>=')
+        fail_msg: "This playbook requires Ubuntu 20.04 or later"
+
+    - name: Bootstrap Python on managed node
+      ansible.builtin.raw: apt-get install -y python3
+      changed_when: false
+
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+  roles:
+    - role: webserver
+
+  post_tasks:
+    - name: Print application URLs
+      ansible.builtin.debug:
+        msg: |
+          ============================================
+          Provisioning complete!
+          ============================================
+          Host: {{ ansible_hostname }}
+          IP:   {{ ansible_host }}
+          App URL: http://{{ ansible_host }}{{ health_check_path }}
+          ============================================

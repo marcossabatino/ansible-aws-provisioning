@@ -1,0 +1,29 @@
+---
+- name: APP | Create application directory structure
+  ansible.builtin.file:
+    path: "{{ app_root }}"
+    state: directory
+    owner: "{{ nginx_user }}"
+    recurse: true
+
+- name: APP | Deploy application index page
+  ansible.builtin.template:
+    src: index.html.j2
+    dest: "{{ app_root }}/index.html"
+    owner: "{{ nginx_user }}"
+    mode: '0644'
+
+- name: APP | Deploy health check endpoint
+  ansible.builtin.copy:
+    dest: "{{ app_root }}/health"
+    content: |
+      {"status": "ok", "app": "{{ app_name }}", "version": "{{ app_version }}"}
+    owner: "{{ nginx_user }}"
+    mode: '0644'
+
+- name: APP | Set correct permissions on app root
+  ansible.builtin.file:
+    path: "{{ app_root }}"
+    recurse: true
+    owner: "{{ nginx_user }}"
+    group: "{{ nginx_user }}"

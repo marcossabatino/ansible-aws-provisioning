@@ -1,0 +1,20 @@
+---
+# Imports in order. Tags allow selective execution:
+#   ansible-playbook deploy.yml --tags nginx
+#   ansible-playbook deploy.yml --tags app
+
+- name: PACKAGES | Install required packages
+  ansible.builtin.import_tasks: 1_packages.yml
+  tags: [packages, install]
+
+- name: NGINX | Configure nginx webserver
+  ansible.builtin.import_tasks: 2_nginx.yml
+  tags: [nginx, configure]
+
+- name: APP | Deploy application
+  ansible.builtin.import_tasks: 3_app.yml
+  tags: [app, deploy]
+
+- name: VERIFY | Verify provisioning
+  ansible.builtin.import_tasks: 4_verify.yml
+  tags: [verify, always]

@@ -1,0 +1,41 @@
+---
+- name: NGINX | Ensure nginx is installed
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+
+- name: NGINX | Create application web root directory
+  ansible.builtin.file:
+    path: "{{ app_root }}"
+    state: directory
+    owner: "{{ nginx_user }}"
+    mode: '0755'
+
+- name: NGINX | Deploy nginx virtual host configuration
+  ansible.builtin.template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/sites-available/{{ app_name }}
+  notify:
+    - validate nginx config
+    - reload nginx
+
+- name: NGINX | Enable virtual host (symlink)
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/{{ app_name }}
+    dest: /etc/nginx/sites-enabled/{{ app_name }}
+    state: link
+  notify:
+    - reload nginx
+
+- name: NGINX | Disable default nginx site
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify:
+    - reload nginx
+
+- name: NGINX | Ensure nginx is started and enabled
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: true

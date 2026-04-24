@@ -1,0 +1,33 @@
+---
+# verify.yml — Read-only verification playbook
+# Checks nginx and app health on all webservers without making any changes.
+# Usage:
+#   ansible-playbook -i inventory/aws_ec2.yml playbooks/verify.yml
+
+- name: Verify provisioning and service health
+  hosts: webservers
+  become: false
+  gather_facts: true
+
+  tasks:
+    - name: VERIFY | Wait for port 80 reachable
+      ansible.builtin.wait_for:
+        port: 80
+        timeout: 30
+      changed_when: false
+
+    - name: VERIFY | Check health endpoint
+      ansible.builtin.uri:
+        url: "http://{{ ansible_host }}/health"
+        status_code: 200
+      changed_when: false
+      register: health_check
+
+    - name: VERIFY | Print host status
+      ansible.builtin.debug:
+        msg: |
+          Host:   {{ ansible_hostname }}
+          IP:     {{ ansible_host }}
+          Status: {{ health_check.status }}
+          URL:    http://{{ ansible_host }}/health
+      changed_when: false

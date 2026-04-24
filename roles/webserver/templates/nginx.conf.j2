@@ -1,0 +1,29 @@
+# Managed by Ansible — role: webserver
+# Project: {{ app_name }} | Environment: {{ project_environment }}
+# Do not edit manually.
+
+server {
+    listen 80;
+    server_name {{ nginx_server_name }};
+    root {{ app_root }};
+    index {{ nginx_index }};
+
+    access_log {{ nginx_access_log }};
+    error_log  {{ nginx_error_log }};
+
+    keepalive_timeout {{ nginx_keepalive_timeout }};
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    location {{ health_check_path }} {
+        default_type application/json;
+        try_files $uri =404;
+    }
+
+    # Security headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header X-Content-Type-Options "nosniff" always;
+}

@@ -1,0 +1,16 @@
+---
+# Application settings
+app_name: demo-app
+app_port: 8080
+app_version: "1.0.0"
+app_root: /var/www/demo-app
+
+# Nginx settings
+nginx_worker_processes: auto
+nginx_worker_connections: 1024
+nginx_keepalive_timeout: 65
+nginx_server_name: "{{ inventory_hostname }}"
+
+# Health check endpoint
+health_check_path: /health
+health_check_expected_status: 200

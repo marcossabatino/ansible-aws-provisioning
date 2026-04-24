@@ -1,0 +1,47 @@
+---
+# Dynamic inventory using the AWS EC2 plugin.
+# Hosts are discovered at runtime by querying the AWS API — no static file needed.
+#
+# Usage:
+#   ansible-inventory -i inventory/aws_ec2.yml --graph
+#   ansible-inventory -i inventory/aws_ec2.yml --list
+#
+# Requirements:
+#   pip3 install boto3 botocore
+#   ansible-galaxy collection install amazon.aws
+
+plugin: amazon.aws.aws_ec2
+
+# Filter to only instances from this project (using the fo:owner tag)
+filters:
+  tag:fo:owner: sabatino
+  tag:fo:environment: sandbox
+  instance-state-name: running
+
+# Group hosts by the Role tag (control vs managed)
+groups:
+  control_nodes: "'control' in tags.Role"
+  webservers:    "'managed' in tags.Role"
+
+# Additional dynamic groups using keyed_groups
+keyed_groups:
+  - prefix: az
+    key: placement.availability_zone
+  - prefix: instance_type
+    key: instance_type
+
+# Use public IP for connections
+hostnames:
+  - ip-address
+  - dns-name
+
+compose:
+  ansible_host: public_ip_address
+  ansible_user: "'ubuntu'"
+  instance_name: "tags.Name"
+
+# Refresh cache every 5 minutes
+cache: true
+cache_plugin: jsonfile
+cache_connection: /tmp/.aws_ec2_cache
+cache_timeout: 300
