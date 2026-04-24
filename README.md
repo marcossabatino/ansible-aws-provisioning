@@ -205,7 +205,7 @@ ansible-aws-provisioning/
 | **Ansible** | >= 2.12 | Orchestrate configuration |
 | **amazon.aws collection** | Latest | AWS API integration |
 | **boto3 / botocore** | Latest | AWS Python SDK (for dynamic inventory) |
-| **SSH key** | RSA 4096+ | EC2 access |
+| **SSH key** | RSA 4096+, named `ansible-aws-provisioning` | EC2 access |
 
 ---
 
@@ -236,8 +236,13 @@ Installing 'amazon.aws:X.X.X' to '~/.ansible/collections/ansible_collections/ama
 ### Step 3: Generate SSH Key (if needed)
 
 ```bash
-ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ""
+ssh-keygen -t rsa -b 4096 -f ~/.ssh/ansible-aws-provisioning -N ""
+ssh-add ~/.ssh/ansible-aws-provisioning
 ```
+
+This creates:
+- `~/.ssh/ansible-aws-provisioning` (private key — keep secure!)
+- `~/.ssh/ansible-aws-provisioning.pub` (public key — uploaded to AWS)
 
 ### Step 4: Terraform Apply
 
