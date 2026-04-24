@@ -20,7 +20,7 @@ output "managed_nodes_instance_ids" {
 
 output "app_urls" {
   description = "Application URLs on managed nodes"
-  value       = ["http://${ip}:${var.app_port}" for ip in aws_instance.managed_nodes[*].public_ip]
+  value       = [for ip in aws_instance.managed_nodes[*].public_ip : "http://${ip}:${var.app_port}"]
 }
 
 output "ssh_control_node" {

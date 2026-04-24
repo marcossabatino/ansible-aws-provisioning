@@ -1,0 +1,8 @@
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mMissing item separator[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  on outputs.tf line 23, in output "app_urls":
+[31m│[0m [0m  23:   value       = ["http://${ip}:${var.app_port}" [4mfor[0m ip in aws_instance.managed_nodes[*].public_ip][0m
+[31m│[0m [0m
+[31m│[0m [0mExpected a comma to mark the beginning of the next item.
+[31m╵[0m[0m

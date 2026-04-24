@@ -71,7 +71,7 @@ resource "aws_security_group" "provisioning_lab" {
   vpc_id      = data.aws_vpc.default.id
 
   ingress {
-    description = "SSH access — restrict allowed_ssh_cidr to your IP in production"
+    description = "SSH access - restrict allowed_ssh_cidr to your IP in production"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
@@ -87,7 +87,7 @@ resource "aws_security_group" "provisioning_lab" {
   }
 
   egress {
-    description = "Allow all outbound — required for apt package installation"
+    description = "Allow all outbound - required for apt package installation"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
