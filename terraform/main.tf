@@ -79,7 +79,15 @@ resource "aws_security_group" "provisioning" {
   }
 
   ingress {
-    description = "HTTP access for nginx application"
+    description = "HTTP standard port for nginx"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "HTTP application port"
     from_port   = var.app_port
     to_port     = var.app_port
     protocol    = "tcp"
