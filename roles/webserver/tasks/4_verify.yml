@@ -23,7 +23,7 @@
 
 - name: VERIFY | Check application HTTP response
   ansible.builtin.uri:
-    url: "http://{{ ansible_host }}:80{{ health_check_path }}"
+    url: "http://localhost:80{{ health_check_path }}"
     status_code: "{{ health_check_expected_status }}"
     timeout: 10
   register: health_check_result
@@ -31,7 +31,6 @@
   delay: "{{ health_check_delay }}"
   until: health_check_result.status == health_check_expected_status | int
   changed_when: false
-  ignore_errors: true
 
 - name: VERIFY | Print verification summary
   ansible.builtin.debug:
@@ -40,5 +39,5 @@
       IP           : {{ ansible_host }}
       nginx status : {{ ansible_facts.services['nginx.service'].state }}
       HTTP status  : {{ health_check_result.status }}
-      App URL      : http://{{ ansible_host }}/{{ health_check_path }}
+      App URL      : http://{{ ansible_host }}{{ health_check_path }}
   changed_when: false

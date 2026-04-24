@@ -17,7 +17,7 @@
     dest: /etc/nginx/sites-available/{{ app_name }}
   notify:
     - validate nginx config
-    - reload nginx
+    - restart nginx
 
 - name: NGINX | Enable virtual host (symlink)
   ansible.builtin.file:
@@ -25,14 +25,14 @@
     dest: /etc/nginx/sites-enabled/{{ app_name }}
     state: link
   notify:
-    - reload nginx
+    - restart nginx
 
 - name: NGINX | Disable default nginx site
   ansible.builtin.file:
     path: /etc/nginx/sites-enabled/default
     state: absent
   notify:
-    - reload nginx
+    - restart nginx
 
 - name: NGINX | Ensure nginx is started and enabled
   ansible.builtin.service:
