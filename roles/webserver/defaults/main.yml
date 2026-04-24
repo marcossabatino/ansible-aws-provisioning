@@ -32,7 +32,7 @@ app_root: /var/www/demo-app
 app_version: "1.0.0"
 
 # ── Health check ───────────────────────────────────────────────────
-health_check_path: /health
+health_check_path: /health.json
 health_check_expected_status: 200
 health_check_retries: 5
 health_check_delay: 5

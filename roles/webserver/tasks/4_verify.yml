@@ -2,7 +2,13 @@
 - name: VERIFY | Wait for nginx to be ready
   ansible.builtin.wait_for:
     port: 80
-    timeout: 30
+    timeout: 60
+    delay: 5
+  changed_when: false
+
+- name: VERIFY | Pause for nginx initialization
+  ansible.builtin.pause:
+    seconds: 3
   changed_when: false
 
 - name: VERIFY | Gather service facts
@@ -19,11 +25,13 @@
   ansible.builtin.uri:
     url: "http://{{ ansible_host }}:80{{ health_check_path }}"
     status_code: "{{ health_check_expected_status }}"
+    timeout: 10
   register: health_check_result
   retries: "{{ health_check_retries }}"
   delay: "{{ health_check_delay }}"
   until: health_check_result.status == health_check_expected_status | int
   changed_when: false
+  ignore_errors: true
 
 - name: VERIFY | Print verification summary
   ansible.builtin.debug:

@@ -15,7 +15,7 @@
 
 - name: APP | Deploy health check endpoint
   ansible.builtin.copy:
-    dest: "{{ app_root }}/health"
+    dest: "{{ app_root }}/health.json"
     content: |
       {"status": "ok", "app": "{{ app_name }}", "version": "{{ app_version }}"}
     owner: "{{ nginx_user }}"
