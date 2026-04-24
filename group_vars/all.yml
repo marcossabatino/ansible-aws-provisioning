@@ -1,7 +1,7 @@
 ---
 # SSH key path for all connections
 ansible_ssh_private_key_file: "~/.ssh/ansible-aws-provisioning"
-ansible_python_interpreter: /usr/bin/python3
+ansible_python_interpreter: /usr/bin/python3.10
 
 # Project metadata (mirrors Terraform fo: tags)
 project_owner: sabatino
