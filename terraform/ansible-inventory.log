@@ -1,0 +1,4 @@
+[WARNING]: Unable to parse /home/sabatino/projetos/portfolio/ansible-aws-provisioning/terraform/inventory/aws_ec2.yml as an inventory source
+[WARNING]: No inventory was parsed, only implicit localhost is available
+@all:
+  |--@ungrouped:

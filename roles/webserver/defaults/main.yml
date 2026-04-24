@@ -1,4 +1,9 @@
 ---
+# ── Project metadata ──────────────────────────────────────────────
+project_owner: sabatino
+project_platform: platform-engineering
+project_environment: sandbox
+
 # ── Package installation ───────────────────────────────────────────
 packages_to_install:
   - nginx

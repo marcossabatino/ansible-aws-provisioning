@@ -19,9 +19,10 @@
   ansible.builtin.uri:
     url: "http://{{ ansible_host }}:80{{ health_check_path }}"
     status_code: "{{ health_check_expected_status }}"
-    retries: "{{ health_check_retries }}"
-    delay: "{{ health_check_delay }}"
   register: health_check_result
+  retries: "{{ health_check_retries }}"
+  delay: "{{ health_check_delay }}"
+  until: health_check_result.status == health_check_expected_status | int
   changed_when: false
 
 - name: VERIFY | Print verification summary
