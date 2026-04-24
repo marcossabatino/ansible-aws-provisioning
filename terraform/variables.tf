@@ -7,7 +7,7 @@ variable "aws_region" {
 variable "project_name" {
   description = "Prefix applied to all resource names for easy identification and cost allocation"
   type        = string
-  default     = "aws-provisioning-lab"
+  default     = "aws-provisioning"
 }
 
 variable "instance_type" {

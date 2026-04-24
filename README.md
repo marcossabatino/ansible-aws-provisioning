@@ -178,7 +178,7 @@ ansible-aws-provisioning/
 ### Changes Made
 
 1. **`variables.tf`**:
-   - `project_name` default: `"aws-provisioning-lab"`
+   - `project_name` default: `"aws-provisioning"`
    - `managed_node_count`: `2` (unchanged but intentional)
    - Added `app_port` (default `8080`)
    - Added `environment` (default `"sandbox"`)
@@ -256,8 +256,8 @@ terraform apply
 
 **Expected output:**
 ```
-aws_key_pair.provisioning_lab: Creating...
-aws_security_group.provisioning_lab: Creating...
+aws_key_pair.provisioning: Creating...
+aws_security_group.provisioning: Creating...
 aws_instance.control_node: Creating...
 aws_instance.managed_nodes[0]: Creating...
 aws_instance.managed_nodes[1]: Creating...
@@ -538,7 +538,7 @@ All AWS resources are tagged with platform-engineering governance tags for compl
 | `fo:platform` | `platform-engineering` | Platform team ownership |
 | `fo:environment` | `sandbox` | Environment classification |
 | `fo:purpose` | `poc-runbooks` | Business purpose and lifecycle |
-| `Project` | `aws-provisioning-lab` | Human-readable project name |
+| `Project` | `aws-provisioning` | Human-readable project name |
 | `ManagedBy` | `terraform` | Infrastructure-as-code source |
 
 These tags automatically filter the dynamic inventory, so only instances belonging to this project are discovered by Ansible.

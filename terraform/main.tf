@@ -56,7 +56,7 @@ data "aws_subnets" "default" {
   }
 }
 
-resource "aws_key_pair" "provisioning_lab" {
+resource "aws_key_pair" "provisioning" {
   key_name   = "${var.project_name}-key"
   public_key = file(pathexpand(var.public_key_path))
 
@@ -65,9 +65,9 @@ resource "aws_key_pair" "provisioning_lab" {
   })
 }
 
-resource "aws_security_group" "provisioning_lab" {
+resource "aws_security_group" "provisioning" {
   name        = "${var.project_name}-sg"
-  description = "Allow SSH and HTTP inbound; all outbound for AWS provisioning lab"
+  description = "Allow SSH and HTTP inbound; all outbound for AWS provisioning"
   vpc_id      = data.aws_vpc.default.id
 
   ingress {
@@ -103,8 +103,8 @@ resource "aws_security_group" "provisioning_lab" {
 resource "aws_instance" "control_node" {
   ami                         = data.aws_ami.ubuntu_2204.id
   instance_type               = var.instance_type
-  key_name                    = aws_key_pair.provisioning_lab.key_name
-  vpc_security_group_ids      = [aws_security_group.provisioning_lab.id]
+  key_name                    = aws_key_pair.provisioning.key_name
+  vpc_security_group_ids      = [aws_security_group.provisioning.id]
   subnet_id                   = data.aws_subnets.default.ids[0]
   associate_public_ip_address = true
 
@@ -134,8 +134,8 @@ resource "aws_instance" "managed_nodes" {
   count                       = var.managed_node_count
   ami                         = data.aws_ami.ubuntu_2204.id
   instance_type               = var.instance_type
-  key_name                    = aws_key_pair.provisioning_lab.key_name
-  vpc_security_group_ids      = [aws_security_group.provisioning_lab.id]
+  key_name                    = aws_key_pair.provisioning.key_name
+  vpc_security_group_ids      = [aws_security_group.provisioning.id]
   subnet_id                   = data.aws_subnets.default.ids[0]
   associate_public_ip_address = true
 
